@@ -2,87 +2,35 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { cn } from "../../lib/utils";
 
-type View = 'home' | 'login' | 'dashboard' | 'booking';
+type View = 'home' | 'login' | 'dashboard' | 'booking' | 'services' | 'gallery';
 
 interface NavItem {
   name: string;
   url: string;
   icon: React.ElementType;
+  view: View;
 }
 
 interface NavBarProps {
   items: NavItem[];
   className?: string;
-  setView: (view: View) => void;
   view: View;
+  navigate: (view: View) => void;
 }
 
-export function NavBar({ items, className, setView, view }: NavBarProps) {
+export function NavBar({ items, className, view, navigate }: NavBarProps) {
   const [activeTab, setActiveTab] = useState(items[0].name);
 
   useEffect(() => {
-    // Si estamos en la página de inicio, escuchamos los eventos de scroll para actualizar la pestaña activa
-    if (view === 'home') {
-      const handleScroll = () => {
-        let currentSectionId = '';
-        const headerOffset = 150; 
-        
-        const sections = items
-          .filter(item => item.url.startsWith("#"))
-          .map(item => document.getElementById(item.url.substring(1)))
-          .filter(Boolean) as HTMLElement[];
-
-        for (const section of sections) {
-          const sectionTop = section.offsetTop;
-          if (window.scrollY >= sectionTop - headerOffset) {
-            currentSectionId = section.getAttribute('id') || '';
-          }
-        }
-        
-        const activeItem = items.find(item => item.url === `#${currentSectionId}`);
-        if(activeItem) {
-            setActiveTab(activeItem.name);
-        } else if (window.scrollY < 200) {
-            setActiveTab(items[0].name);
-        }
-      };
-
-      window.addEventListener("scroll", handleScroll, { passive: true });
-      handleScroll(); 
-
-      return () => window.removeEventListener("scroll", handleScroll);
+    const activeItem = items.find(item => item.view === view);
+    
+    if (activeItem) {
+      setActiveTab(activeItem.name);
     } else {
-      // Para otras vistas como 'booking', establecemos la pestaña activa según la vista
-      const activeItem = items.find(item => item.url === view);
-      if (activeItem) {
-        setActiveTab(activeItem.name);
-      } else {
-        setActiveTab(''); 
-      }
+      setActiveTab(''); 
     }
   }, [items, view]);
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, item: NavItem) => {
-    e.preventDefault();
-    // Para navegación tipo página (ej. 'booking')
-    if (!item.url.startsWith("#")) {
-      setView(item.url as View);
-      return;
-    }
-
-    // Para navegación con enlaces de ancla
-    if (view !== 'home') {
-      // Si no estamos en la página de inicio, cambiamos a ella y luego hacemos scroll
-      setView('home');
-      // Usamos un pequeño retraso para permitir que los componentes de la página de inicio se rendericen antes de hacer scroll
-      setTimeout(() => {
-        document.querySelector(item.url)?.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
-    } else {
-      // Si ya estamos en la página de inicio, solo hacemos scroll
-      document.querySelector(item.url)?.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
 
   return (
     <div
@@ -100,7 +48,10 @@ export function NavBar({ items, className, setView, view }: NavBarProps) {
             <a
               key={item.name}
               href={item.url}
-              onClick={(e) => handleNavClick(e, item)}
+              onClick={(e) => {
+                e.preventDefault();
+                navigate(item.view);
+              }}
               className={cn(
                 "relative cursor-pointer text-sm font-semibold px-4 py-2 rounded-full transition-colors",
                 isActive ? "text-amber-500" : "text-zinc-400 hover:text-amber-500"

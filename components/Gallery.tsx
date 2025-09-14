@@ -3,7 +3,7 @@ import { GALLERY_IMAGES } from '../constants';
 
 const Gallery: React.FC = () => {
   return (
-    <section id="gallery" className="py-20 bg-zinc-900">
+    <section id="gallery" className="pt-28 pb-20 bg-zinc-900">
       <div className="container mx-auto px-6">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold font-serif text-amber-500">Nuestro Trabajo</h2>

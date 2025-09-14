@@ -3,12 +3,12 @@ import { LogInIcon, LockIcon, MailIcon } from "./icons/Icons";
 
 interface AuthProps {
   onLoginSuccess: () => void;
-  setView: (view: 'home') => void;
+  navigate: (view: 'home') => void;
 }
 
 const API_URL = 'http://localhost:3001';
 
-const Auth: React.FC<AuthProps> = ({ onLoginSuccess, setView }) => {
+const Auth: React.FC<AuthProps> = ({ onLoginSuccess, navigate }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -139,7 +139,7 @@ const Auth: React.FC<AuthProps> = ({ onLoginSuccess, setView }) => {
             />
           </button>
         </div>
-         <button onClick={() => setView('home')} className="text-xs text-zinc-400 hover:underline font-medium mt-6">
+         <button onClick={() => navigate('home')} className="text-xs text-zinc-400 hover:underline font-medium mt-6">
               Volver al inicio
         </button>
       </div>

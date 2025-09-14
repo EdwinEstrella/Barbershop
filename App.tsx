@@ -8,48 +8,81 @@ import Booking from './components/Contact';
 import Footer from './components/Footer';
 import Dashboard from './components/Dashboard';
 import Auth from './components/Auth';
+import WhyUs from './components/WhyUs';
 
-type View = 'home' | 'login' | 'dashboard' | 'booking';
+type View = 'home' | 'login' | 'dashboard' | 'booking' | 'services' | 'gallery';
 
 function App() {
   const [view, setView] = useState<View>('home');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  // Initial auth check
   useEffect(() => {
     const token = localStorage.getItem('authToken');
     if (token) {
       setIsAuthenticated(true);
     }
   }, []);
+  
+  // Hash-based routing effect
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace(/^#\/?/, '').split('?')[0] || 'home';
+      if (['home', 'login', 'dashboard', 'booking', 'services', 'gallery'].includes(hash)) {
+          setView(hash as View);
+      } else {
+          setView('home');
+      }
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    handleHashChange(); // For initial load
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  const navigate = (targetView: View) => {
+    window.location.hash = `/${targetView}`;
+  };
+
+  // Auth redirection logic
+  useEffect(() => {
+      if (view === 'dashboard' && !isAuthenticated) {
+          navigate('login');
+      }
+      if (view === 'login' && isAuthenticated) {
+          navigate('dashboard');
+      }
+  }, [view, isAuthenticated]);
+
 
   const handleLoginSuccess = () => {
     setIsAuthenticated(true);
-    setView('dashboard');
+    navigate('dashboard');
   };
   
   const handleLogout = () => {
     localStorage.removeItem('authToken');
     setIsAuthenticated(false);
-    setView('home');
+    navigate('home');
   };
 
   const renderContent = () => {
     switch (view) {
       case 'login':
-        return <Auth onLoginSuccess={handleLoginSuccess} setView={setView} />;
+        return <Auth onLoginSuccess={handleLoginSuccess} navigate={navigate} />;
       case 'dashboard':
-        if (!isAuthenticated) {
-          return <Auth onLoginSuccess={handleLoginSuccess} setView={setView} />; 
-        }
-        return <Dashboard />;
+        return isAuthenticated ? <Dashboard /> : null; // Render null while redirecting
       case 'booking':
-        return <Booking setView={setView} />;
+        return <Booking navigate={navigate} />;
+      case 'services':
+        return <Services />;
+      case 'gallery':
+        return <Gallery />;
       case 'home':
       default:
         return (
           <>
-            <Services />
-            <Gallery />
+            <Hero navigate={navigate} />
+            <WhyUs />
             <Testimonials />
           </>
         );
@@ -61,21 +94,15 @@ function App() {
       <Header 
         isAuthenticated={isAuthenticated} 
         view={view}
-        setView={setView} 
+        navigate={navigate} 
         onLogout={handleLogout}
       />
       
-      {view === 'home' && (
-        <section id="home">
-          <Hero setView={setView} />
-        </section>
-      )}
-
       <main>
         {renderContent()}
       </main>
       
-      {(view === 'home' || view === 'booking') && <Footer />}
+      {['home', 'booking', 'services', 'gallery'].includes(view) && <Footer navigate={navigate} />}
     </>
   );
 }

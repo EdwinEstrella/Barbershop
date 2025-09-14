@@ -1,6 +1,8 @@
 import React from 'react';
 import { FacebookIcon, InstagramIcon, TwitterIcon, MailIcon, MapPinIcon, PhoneIcon } from './icons/Icons';
 
+type View = 'home' | 'services' | 'gallery' | 'testimonials' | 'booking';
+
 const data = {
   company: {
     name: 'El Corte del Caballero',
@@ -12,16 +14,15 @@ const data = {
     { icon: TwitterIcon, label: 'Twitter', href: '#' },
   ],
   navLinks: [
-    { text: 'Inicio', href: '#home' },
-    { text: 'Servicios', href: '#services' },
-    { text: 'Galería', href: '#gallery' },
-    { text: 'Testimonios', href: '#testimonials' },
+    { text: 'Inicio', href: '#/home', view: 'home' as View },
+    { text: 'Servicios', href: '#/services', view: 'services' as View },
+    { text: 'Galería', href: '#/gallery', view: 'gallery' as View },
   ],
   serviceLinks: [
-    { text: 'Corte Clásico', href: '#services' },
-    { text: 'Afeitado a Navaja', href: '#services' },
-    { text: 'Recorte de Barba', href: '#services' },
-    { text: 'Servicio Completo', href: '#services' },
+    { text: 'Corte Clásico', href: '#/services', view: 'services' as View },
+    { text: 'Afeitado a Navaja', href: '#/services', view: 'services' as View },
+    { text: 'Recorte de Barba', href: '#/services', view: 'services' as View },
+    { text: 'Servicio Completo', href: '#/services', view: 'services' as View },
   ],
   contactInfo: [
     { icon: MailIcon, text: 'contacto@elcortedelcaballero.com', href: 'mailto:contacto@elcortedelcaballero.com' },
@@ -30,7 +31,17 @@ const data = {
   ],
 };
 
-const Footer: React.FC = () => {
+interface FooterProps {
+  navigate: (view: any) => void;
+}
+
+const Footer: React.FC<FooterProps> = ({ navigate }) => {
+  
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, view: View) => {
+    e.preventDefault();
+    navigate(view);
+  };
+
   return (
     <footer className="bg-zinc-900 mt-16 w-full place-self-end">
       <div className="container mx-auto px-6 pt-16 pb-6 sm:px-6 lg:pt-24">
@@ -65,11 +76,12 @@ const Footer: React.FC = () => {
             <div className="text-center sm:text-left">
               <p className="text-lg font-medium text-white">Navegación</p>
               <ul className="mt-8 space-y-4 text-sm">
-                {data.navLinks.map(({ text, href }) => (
+                {data.navLinks.map(({ text, href, view }) => (
                   <li key={text}>
                     <a
-                      className="text-gray-400 hover:text-amber-500 transition"
+                      className="text-gray-400 hover:text-amber-500 transition cursor-pointer"
                       href={href}
+                      onClick={(e) => handleNavClick(e, view)}
                     >
                       {text}
                     </a>
@@ -81,11 +93,12 @@ const Footer: React.FC = () => {
             <div className="text-center sm:text-left">
               <p className="text-lg font-medium text-white">Servicios</p>
               <ul className="mt-8 space-y-4 text-sm">
-                {data.serviceLinks.map(({ text, href }) => (
+                {data.serviceLinks.map(({ text, href, view }) => (
                   <li key={text}>
                     <a
-                      className="text-gray-400 hover:text-amber-500 transition"
+                      className="text-gray-400 hover:text-amber-500 transition cursor-pointer"
                       href={href}
+                      onClick={(e) => handleNavClick(e, view)}
                     >
                       {text}
                     </a>

@@ -2,13 +2,13 @@ import React from 'react';
 import { MapPinIcon, PhoneIcon, ClockIcon } from './icons/Icons';
 import BookingForm from './BookingForm';
 
-type View = 'home' | 'login' | 'dashboard' | 'booking';
+type View = 'home' | 'login' | 'dashboard' | 'booking' | 'services' | 'gallery';
 
 interface BookingProps {
-  setView: (view: View) => void;
+  navigate: (view: View) => void;
 }
 
-const Booking: React.FC<BookingProps> = ({ setView }) => {
+const Booking: React.FC<BookingProps> = ({ navigate }) => {
   return (
     <section id="booking" className="py-20 pt-28 bg-zinc-900 min-h-screen">
       <div className="container mx-auto px-6">
@@ -45,7 +45,7 @@ const Booking: React.FC<BookingProps> = ({ setView }) => {
             <BookingForm />
           </div>
         </div>
-        <button onClick={() => setView('home')} className="text-xs text-zinc-400 hover:underline font-medium mt-12 block mx-auto">
+        <button onClick={() => navigate('home')} className="text-xs text-zinc-400 hover:underline font-medium mt-12 block mx-auto">
           Volver al inicio
         </button>
       </div>

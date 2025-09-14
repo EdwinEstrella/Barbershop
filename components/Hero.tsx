@@ -2,10 +2,10 @@ import React from "react";
 import { cn } from "../lib/utils";
 import { ChevronRightIcon } from "./icons/Icons";
 
-type View = 'home' | 'login' | 'dashboard' | 'booking';
+type View = 'home' | 'login' | 'dashboard' | 'booking' | 'services' | 'gallery';
 
 interface HeroSectionProps extends React.HTMLAttributes<HTMLDivElement> {
-  setView: (view: View) => void;
+  navigate: (view: View) => void;
   gridOptions?: {
     angle?: number
     cellSize?: number
@@ -44,7 +44,7 @@ const RetroGrid = ({
   )
 }
 
-const Hero: React.FC<HeroSectionProps> = ({ className, setView, gridOptions, ...props }) => {
+const Hero: React.FC<HeroSectionProps> = ({ className, navigate, gridOptions, ...props }) => {
     return (
       <div className={cn("relative", className)} {...props}>
         <div className="absolute top-0 z-[0] h-screen w-screen bg-amber-950/10 bg-[radial-gradient(ellipse_20%_80%_at_50%_-20%,rgba(217,119,6,0.2),rgba(255,255,255,0))]" />
@@ -70,7 +70,7 @@ const Hero: React.FC<HeroSectionProps> = ({ className, setView, gridOptions, ...
                   <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#fcd34d_0%,#b45309_50%,#fcd34d_100%)]" />
                   <div className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-zinc-950 text-xs font-medium backdrop-blur-3xl">
                     <button
-                      onClick={() => setView('booking')}
+                      onClick={() => navigate('booking')}
                       className="inline-flex rounded-full text-center group items-center w-full justify-center bg-gradient-to-tr from-zinc-300/5 via-amber-400/10 to-transparent text-white border-zinc-700 border hover:bg-gradient-to-tr hover:from-zinc-300/10 hover:via-amber-400/20 transition-all sm:w-auto py-4 px-10"
                     >
                       Reservar Cita

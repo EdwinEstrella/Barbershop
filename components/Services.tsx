@@ -5,7 +5,7 @@ import ServiceCard from './ServiceCard';
 
 const Services: React.FC = () => {
   return (
-    <section id="services" className="py-20 bg-zinc-800">
+    <section id="services" className="pt-28 pb-20 bg-zinc-800">
       <div className="container mx-auto px-6">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold font-serif text-amber-500">Nuestros Servicios</h2>
