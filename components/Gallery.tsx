@@ -1,7 +1,15 @@
 import React from 'react';
-import { GALLERY_IMAGES } from '../constants';
 
 const Gallery: React.FC = () => {
+  const galleryImages = [
+    "/images/fade.jpeg",
+    "/images/face2.jpeg",
+    "/images/fade3.jpeg",
+    "/images/fade4.jpeg",
+    "/images/fade5.jpeg",
+    "/images/fade6.jpeg",
+  ];
+
   return (
     <section id="gallery" className="pt-28 pb-20 bg-zinc-900">
       <div className="container mx-auto px-6">
@@ -10,8 +18,8 @@ const Gallery: React.FC = () => {
           <p className="text-lg text-gray-400 mt-2">Un vistazo a nuestro arte.</p>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {GALLERY_IMAGES.map((src, index) => (
-            <div key={index} className="overflow-hidden rounded-lg">
+          {galleryImages.map((src, index) => (
+            <div key={index} className="aspect-square overflow-hidden rounded-lg bg-zinc-800 border border-zinc-700 flex items-center justify-center text-zinc-500">
               <img 
                 src={src} 
                 alt={`Imagen de la galería de la barbería ${index + 1}`} 

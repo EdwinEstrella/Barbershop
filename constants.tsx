@@ -28,12 +28,3 @@ export const SERVICES_DATA: Service[] = [
     price: "$75"
   }
 ];
-
-export const GALLERY_IMAGES: string[] = [
-  "https://picsum.photos/id/102/800/600",
-  "https://picsum.photos/id/212/800/600",
-  "https://picsum.photos/id/326/800/600",
-  "https://picsum.photos/id/367/800/600",
-  "https://picsum.photos/id/103/800/600",
-  "https://picsum.photos/id/40/800/600",
-];
